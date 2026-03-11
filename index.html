@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pip Tumblecoin — Hoja de Personaje D&D 5e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --oro: #c9a84c; --oro-claro: #f0d080; --oscuro: #0a0804; --profundo: #14100a;
+    --crema: #f0e6cc; --humo: #cfc4a0; --rojo: #8b1a1a; --rojo-claro: #c13030;
+    --azul-link: #7ec8e3; --morado: #c090ff;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--oscuro); color: var(--crema);
+    font-family: 'Crimson Pro', Georgia, serif; font-size:16px; line-height:1.5;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 10% 0%, rgba(201,168,76,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 60% at 90% 100%, rgba(139,26,26,0.07) 0%, transparent 60%);
+  }
+  body::before {
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40 Q20 20 40 40 Q60 60 80 40' stroke='%23c9a84c' stroke-width='0.2' fill='none' opacity='0.06'/%3E%3C/svg%3E");
+    opacity:0.4;
+  }
+  .pagina { position:relative; z-index:1; max-width:1020px; margin:0 auto; padding:36px 20px 60px; }
+  a { color:var(--azul-link); text-decoration:none; border-bottom:1px dotted rgba(126,200,227,0.4); transition:color .15s,border-color .15s; }
+  a:hover { color:#b8e8f8; border-bottom-color:#b8e8f8; }
+  a::after { content:' ↗'; font-size:.65em; opacity:.6; }
+  .cabecera { text-align:center; margin-bottom:32px; }
+  .palos { font-size:1.6rem; color:var(--oro); opacity:.35; letter-spacing:18px; margin-bottom:14px; }
+  .nombre-personaje { font-family:'Cinzel Decorative',serif; font-size:clamp(2rem,5vw,3.2rem); color:var(--oro-claro); text-shadow:0 0 40px rgba(201,168,76,.35),0 2px 6px rgba(0,0,0,.9); letter-spacing:.05em; line-height:1.1; }
+  .subtitulo { font-family:'Cinzel',serif; font-size:.82rem; color:var(--humo); letter-spacing:.22em; text-transform:uppercase; margin-top:8px; opacity:.7; }
+  .divisor { display:flex; align-items:center; gap:12px; margin:18px 0; }
+  .divisor::before,.divisor::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--oro),transparent); opacity:.35; }
+  .divisor span { color:var(--oro); font-size:1rem; opacity:.6; }
+  .cita { font-style:italic; color:var(--humo); font-size:.92rem; max-width:500px; margin:0 auto; opacity:.65; line-height:1.7; }
+  .alerta { background:linear-gradient(90deg,rgba(45,106,45,.15),rgba(45,106,45,.08)); border:1px solid rgba(80,160,80,.3); border-radius:6px; padding:10px 16px; margin-bottom:24px; font-size:.85rem; color:#90e090; display:flex; align-items:center; gap:10px; }
+  .tira { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:2px; margin-bottom:24px; border:1px solid rgba(201,168,76,.2); border-radius:6px; overflow:hidden; }
+  .celda { background:rgba(20,16,10,.9); padding:11px 10px; text-align:center; border-right:1px solid rgba(201,168,76,.1); transition:background .2s; }
+  .celda:last-child { border-right:none; }
+  .celda:hover { background:rgba(34,26,8,.95); }
+  .etiq { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; color:var(--oro); opacity:.65; margin-bottom:4px; }
+  .val { font-size:.85rem; color:var(--crema); font-weight:600; }
+  .val a::after { display:none; }
+  .val a { color:var(--crema); border-bottom:1px dotted rgba(201,168,76,.4); }
+  .val a:hover { color:var(--oro-claro); }
+  .fila-stats { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-bottom:22px; }
+  .caja-stat { background:linear-gradient(170deg,rgba(20,16,10,.97),rgba(8,6,2,.99)); border:1px solid rgba(201,168,76,.2); border-radius:8px; padding:14px 8px 10px; text-align:center; box-shadow:0 3px 14px rgba(0,0,0,.5); transition:border-color .2s; }
+  .caja-stat:hover { border-color:rgba(201,168,76,.4); }
+  .num-stat { font-family:'Cinzel Decorative',serif; font-size:1.7rem; color:var(--oro-claro); text-shadow:0 0 18px rgba(201,168,76,.25); line-height:1; cursor:pointer; }
+  .etiq-stat { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.15em; text-transform:uppercase; color:var(--humo); opacity:.65; margin-top:5px; }
+  .etiq-stat a { color:var(--humo); font-size:inherit; border-bottom-color:rgba(207,196,160,.3); }
+  .etiq-stat a:hover { color:var(--oro-claro); }
+  .etiq-stat a::after { display:none; }
+  .xp-section { margin-bottom:22px; }
+  .xp-label { display:flex; justify-content:space-between; font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:.12em; color:var(--oro); opacity:.55; margin-bottom:4px; }
+  .xp-wrap { background:rgba(0,0,0,.5); border:1px solid rgba(201,168,76,.15); border-radius:3px; height:8px; overflow:hidden; }
+  .xp-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--oro),var(--oro-claro)); border-radius:3px; transition:width .5s ease; }
+  .columnas { display:grid; grid-template-columns:1fr 1.55fr; gap:18px; margin-bottom:18px; }
+  .tarjeta { background:linear-gradient(155deg,rgba(20,16,10,.97) 0%,rgba(8,6,2,.99) 100%); border:1px solid rgba(201,168,76,.18); border-radius:8px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,.5),inset 0 1px 0 rgba(201,168,76,.08); margin-bottom:18px; }
+  .t-head { background:linear-gradient(90deg,rgba(34,26,8,.9),rgba(20,16,10,.5)); padding:9px 15px; border-bottom:1px solid rgba(201,168,76,.15); display:flex; align-items:center; gap:8px; }
+  .t-icon { font-size:.95rem; opacity:.85; }
+  .t-title { font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--oro-claro); flex:1; }
+  .t-link { font-family:'Cinzel',serif; font-size:.58rem; color:var(--azul-link); letter-spacing:.1em; opacity:.75; border-bottom:none!important; }
+  .t-link::after { font-size:.8em; }
+  .t-link:hover { opacity:1; }
+  .t-body { padding:14px; }
+  .grilla-hab { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .caja-hab { background:rgba(0,0,0,.35); border:1px solid rgba(201,168,76,.15); border-radius:6px; padding:10px 6px; text-align:center; transition:border-color .2s,box-shadow .2s; cursor:default; }
+  .caja-hab:hover { border-color:var(--oro); box-shadow:0 0 10px rgba(201,168,76,.12); }
+  .caja-hab.dest { border-color:rgba(201,168,76,.4); }
+  .n-hab { font-family:'Cinzel',serif; font-size:.58rem; letter-spacing:.12em; color:var(--oro); opacity:.7; }
+  .n-hab a { color:var(--oro); font-size:inherit; border-bottom-color:rgba(201,168,76,.3); }
+  .n-hab a::after { display:none; }
+  .n-hab a:hover { color:var(--oro-claro); opacity:1; }
+  .p-hab { font-family:'Cinzel Decorative',serif; font-size:1.5rem; color:var(--oro-claro); line-height:1.1; margin:3px 0 1px; }
+  .m-hab { font-size:.8rem; color:var(--humo); opacity:.85; }
+  .s-hab { font-size:.62rem; color:var(--oro); opacity:.55; margin-top:2px; }
+  .lista-salv { list-style:none; }
+  .lista-salv li { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid rgba(201,168,76,.07); font-size:.84rem; }
+  .lista-salv li:last-child { border-bottom:none; }
+  .pip { width:9px; height:9px; border-radius:50%; border:1px solid rgba(201,168,76,.35); flex-shrink:0; }
+  .pip.p { background:var(--oro); border-color:var(--oro); }
+  .n-salv { flex:1; color:var(--humo); opacity:.85; }
+  .b-salv { font-family:'Cinzel',serif; font-size:.75rem; color:var(--oro-claro); font-weight:600; min-width:28px; text-align:right; }
+  .grilla-sk { display:grid; grid-template-columns:1fr 1fr; gap:3px 14px; }
+  .fila-sk { display:flex; align-items:center; gap:7px; padding:4px 0; font-size:.8rem; border-bottom:1px solid rgba(201,168,76,.05); }
+  .pipsk { width:8px; height:8px; border-radius:50%; border:1px solid rgba(201,168,76,.3); flex-shrink:0; }
+  .pipsk.p { background:var(--oro); border-color:var(--oro); }
+  .pipsk.e { background:var(--oro-claro); border-color:var(--oro-claro); box-shadow:0 0 5px rgba(201,168,76,.4); }
+  .n-sk { flex:1; color:var(--humo); opacity:.85; font-size:.8rem; }
+  .n-sk a { color:var(--humo); font-size:inherit; border-bottom-color:rgba(207,196,160,.25); }
+  .n-sk a::after { display:none; }
+  .n-sk a:hover { color:var(--oro-claro); }
+  .b-sk { font-family:'Cinzel',serif; font-size:.73rem; color:var(--oro-claro); font-weight:600; min-width:24px; text-align:right; }
+  .lista-rasgos { list-style:none; }
+  .lista-rasgos li { padding:8px 0; border-bottom:1px solid rgba(201,168,76,.07); display:flex; gap:9px; font-size:.875rem; line-height:1.45; }
+  .lista-rasgos li:last-child { border-bottom:none; }
+  .r-icon { color:var(--oro); opacity:.65; flex-shrink:0; margin-top:1px; font-size:.9rem; }
+  .r-name { font-family:'Cinzel',serif; font-size:.7rem; color:var(--oro-claro); letter-spacing:.04em; display:block; margin-bottom:2px; }
+  .r-name a { color:var(--oro-claro); border-bottom-color:rgba(201,168,76,.3); font-size:inherit; }
+  .r-name a::after { display:none; }
+  .r-name a:hover { color:#fff0a0; }
+  .r-desc { color:var(--humo); font-size:.82rem; opacity:.85; font-style:italic; }
+  .meta-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .meta-tag { background:rgba(90,30,130,.2); border:1px solid rgba(150,80,200,.3); border-radius:4px; padding:4px 10px; font-size:.77rem; color:var(--morado); cursor:default; transition:all .15s; }
+  .meta-tag:hover { background:rgba(90,30,130,.4); border-color:rgba(150,80,200,.6); }
+  .meta-tag a { color:var(--morado); border-bottom:none; font-size:inherit; }
+  .meta-tag a::after { display:none; }
+  .meta-tag a:hover { color:#e0c0ff; }
+  .nivel-conj { margin-bottom:16px; }
+  .label-nivel { font-family:'Cinzel',serif; font-size:.63rem; letter-spacing:.18em; text-transform:uppercase; color:var(--oro); opacity:.55; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
+  .label-nivel::after { content:''; flex:1; height:1px; background:rgba(201,168,76,.12); }
+  .espacios { display:flex; gap:5px; margin-bottom:6px; flex-wrap:wrap; align-items:center; }
+  .espacio { width:15px; height:15px; border-radius:50%; border:1px solid var(--oro); opacity:.65; cursor:pointer; transition:all .15s; }
+  .espacio.lleno { background:var(--oro); opacity:1; }
+  .espacio.usado { background:transparent; opacity:.2; }
+  .espacio:hover { transform:scale(1.15); opacity:1; }
+  .conj-tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .conj-tag { background:rgba(0,0,0,.45); border:1px solid rgba(201,168,76,.18); border-radius:4px; padding:4px 9px; font-size:.77rem; color:var(--crema); cursor:default; transition:all .15s; position:relative; }
+  .conj-tag:hover { border-color:var(--oro); color:var(--oro-claro); }
+  .conj-tag.conc { border-color:rgba(139,26,26,.45); color:#ff9090; }
+  .conj-tag a { color:inherit; border-bottom:none; font-size:inherit; }
+  .conj-tag a::after { display:none; }
+  .conj-tag:hover a { color:var(--oro-claro); }
+  .conj-tag.conc a { color:#ff9090; }
+  .conj-tag[data-tip]:hover::after { content:attr(data-tip); position:absolute; bottom:115%; left:50%; transform:translateX(-50%); background:rgba(8,6,2,.97); border:1px solid rgba(201,168,76,.25); border-radius:4px; padding:5px 9px; font-size:.7rem; color:var(--crema); white-space:nowrap; z-index:100; pointer-events:none; }
+  .tabla-salvaje { background:rgba(139,26,26,.07); border:1px solid rgba(139,26,26,.2); border-radius:6px; padding:10px 12px; margin-top:10px; }
+  .entrada-sv { display:flex; gap:10px; padding:5px 0; border-bottom:1px solid rgba(139,26,26,.08); font-size:.79rem; }
+  .entrada-sv:last-child { border-bottom:none; }
+  .tirada-sv { font-family:'Cinzel',serif; color:var(--rojo-claro); min-width:38px; font-size:.7rem; opacity:.75; flex-shrink:0; }
+  .efecto-sv { color:var(--humo); opacity:.85; font-style:italic; }
+  .texto-trasfondo { font-size:.88rem; line-height:1.8; color:var(--humo); opacity:.9; }
+  .texto-trasfondo p { margin-bottom:10px; }
+  .lista-equipo { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:4px 16px; }
+  .lista-equipo li { display:flex; align-items:center; gap:7px; font-size:.82rem; padding:4px 0; border-bottom:1px solid rgba(201,168,76,.05); color:var(--humo); opacity:.85; }
+  .lista-equipo li::before { content:'◆'; color:var(--oro); opacity:.4; font-size:.5rem; }
+  .area-notas { background:rgba(0,0,0,.3); border:1px solid rgba(201,168,76,.1); border-radius:6px; padding:10px 12px; min-height:80px; font-family:'Crimson Pro',serif; font-size:.875rem; color:var(--crema); width:100%; resize:vertical; outline:none; line-height:1.6; transition:border-color .2s; }
+  .area-notas:focus { border-color:rgba(201,168,76,.3); }
+  .area-notas::placeholder { color:var(--humo); opacity:.35; font-style:italic; }
+  .ancho-completo { grid-column:1/-1; }
+  .dado-golpe { display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; background:linear-gradient(135deg,rgba(139,26,26,.3),rgba(80,10,10,.5)); border:1px solid rgba(193,48,48,.35); border-radius:6px; font-family:'Cinzel Decorative',serif; font-size:.85rem; color:#ff8080; margin-right:8px; }
+  .pie { text-align:center; margin-top:36px; padding-top:20px; border-top:1px solid rgba(201,168,76,.08); }
+  .pie-palos { color:var(--oro); opacity:.2; font-size:1.4rem; letter-spacing:14px; }
+  .pie-nota { font-family:'Cinzel',serif; font-size:.65rem; color:var(--humo); opacity:.25; margin-top:8px; letter-spacing:.12em; }
+  @media(max-width:700px){
+    .columnas{grid-template-columns:1fr}
+    .fila-stats{grid-template-columns:repeat(3,1fr)}
+    .grilla-hab{grid-template-columns:repeat(3,1fr)}
+    .grilla-sk{grid-template-columns:1fr}
+    .lista-equipo{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="pagina">
+
+  <div class="cabecera">
+    <div class="palos">♠ ♦ ♣ ♥</div>
+    <div class="nombre-personaje">Pip Tumblecoin</div>
+    <div class="subtitulo">Mediano Piesligeros · Hechicero de Magia Salvaje · Nivel 1 · Neutral Caótico</div>
+    <div class="divisor"><span>✦</span></div>
+    <div class="cita">"Nunca jugué una mano sin leer la sala primero… aunque la sala a veces termina en llamas."</div>
+  </div>
+
+  <div class="alerta">
+    <span>🎲</span>
+    <div>
+      <strong>Personaje nuevo — Nivel 1.</strong>
+      Todos los espacios de conjuro se restauran con un
+      <a href="https://www.dndbeyond.com/sources/dnd/basic-rules/adventuring#Resting" target="_blank">Descanso Largo</a>.
+      XP actual: <strong>0 / 300</strong>.
+    </div>
+  </div>
+
+  <div class="tira">
+    <div class="celda"><div class="etiq">Raza</div><div class="val"><a href="https://www.dndbeyond.com/species/14-halfling" target="_blank">Mediano Piesligeros</a></div></div>
+    <div class="celda"><div class="etiq">Clase</div><div class="val"><a href="https://www.dndbeyond.com/classes/6-sorcerer" target="_blank">Hechicero</a></div></div>
+    <div class="celda"><div class="etiq">Origen Mágico</div><div class="val"><a href="https://www.dndbeyond.com/posts/701-sorcerer-101-wild-magic" target="_blank">Magia Salvaje</a></div></div>
+    <div class="celda"><div class="etiq">Trasfondo</div><div class="val"><a href="https://www.dndbeyond.com/backgrounds/charlatan" target="_blank">Charlatán</a></div></div>
+    <div class="celda"><div class="etiq">Nivel / XP</div><div class="val">1 · 0 XP</div></div>
+    <div class="celda"><div class="etiq">Tamaño / Vel.</div><div class="val">Pequeño · <a href="https://www.dndbeyond.com/sources/dnd/basic-rules/adventuring#Speed" target="_blank">25 pies</a></div></div>
+  </div>
+
+  <div class="fila-stats">
+    <div class="caja-stat">
+      <div class="num-stat" id="hp-num" title="Clic para editar">6</div>
+      <div style="background:rgba(0,0,0,.5);border:1px solid rgba(201,168,76,.15);border-radius:3px;height:6px;overflow:hidden;margin-top:6px;">
+        <div id="hp-bar" style="height:100%;width:100%;background:linear-gradient(90deg,#8b1a1a,#c13030);border-radius:3px;transition:width .3s;"></div>
+      </div>
+      <div class="etiq-stat"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/combat#HitPoints" target="_blank">Puntos de Golpe</a> (6 máx)</div>
+    </div>
+    <div class="caja-stat">
+      <div class="num-stat">13</div>
+      <div class="etiq-stat"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/combat#ArmorClass" target="_blank">Clase de Armadura</a></div>
+    </div>
+    <div class="caja-stat">
+      <div class="num-stat">+2</div>
+      <div class="etiq-stat"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#ProficiencyBonus" target="_blank">Bonif. Competencia</a></div>
+    </div>
+    <div class="caja-stat">
+      <div class="num-stat">+6</div>
+      <div class="etiq-stat"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/spellcasting#AttackRollsandSavingThrows" target="_blank">Ataque con Conjuro</a></div>
+    </div>
+    <div class="caja-stat">
+      <div class="num-stat">14</div>
+      <div class="etiq-stat"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/spellcasting#AttackRollsandSavingThrows" target="_blank">CD de Salvación</a></div>
+    </div>
+  </div>
+
+  <div class="xp-section">
+    <div class="xp-label"><span>EXPERIENCIA</span><span>0 / 300 XP — Nivel 1</span></div>
+    <div class="xp-wrap"><div class="xp-fill"></div></div>
+  </div>
+
+  <div class="columnas">
+
+    <!-- IZQUIERDA -->
+    <div>
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">🎲</span><span class="t-title">Características</span><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores" target="_blank" class="t-link">Ver reglas</a></div>
+        <div class="t-body">
+          <div class="grilla-hab">
+            <div class="caja-hab"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Strength" target="_blank">FUE</a></div><div class="p-hab">8</div><div class="m-hab">−1</div><div class="s-hab">Salv. −1</div></div>
+            <div class="caja-hab"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Dexterity" target="_blank">DES</a></div><div class="p-hab">16</div><div class="m-hab">+3</div><div class="s-hab">Salv. +3</div></div>
+            <div class="caja-hab"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Constitution" target="_blank">CON</a></div><div class="p-hab">14</div><div class="m-hab">+2</div><div class="s-hab">Salv. +4 ✦</div></div>
+            <div class="caja-hab"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Intelligence" target="_blank">INT</a></div><div class="p-hab">10</div><div class="m-hab">+0</div><div class="s-hab">Salv. +0</div></div>
+            <div class="caja-hab"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Wisdom" target="_blank">SAB</a></div><div class="p-hab">10</div><div class="m-hab">+0</div><div class="s-hab">Salv. +0</div></div>
+            <div class="caja-hab dest"><div class="n-hab"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Charisma" target="_blank">CAR</a></div><div class="p-hab" style="color:#ffd93d">18</div><div class="m-hab">+4</div><div class="s-hab" style="color:var(--oro-claro)">Salv. +6 ✦</div></div>
+          </div>
+          <div style="margin-top:8px;font-size:.68rem;color:var(--humo);opacity:.45;font-style:italic;">✦ Tiradas de salvación con competencia</div>
+        </div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">🛡️</span><span class="t-title">Tiradas de Salvación</span><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#SavingThrows" target="_blank" class="t-link">Ver reglas</a></div>
+        <div class="t-body">
+          <ul class="lista-salv">
+            <li><div class="pip"></div><span class="n-salv">Fuerza</span><span class="b-salv">−1</span></li>
+            <li><div class="pip"></div><span class="n-salv">Destreza</span><span class="b-salv">+3</span></li>
+            <li><div class="pip p"></div><span class="n-salv">Constitución ✦</span><span class="b-salv">+4</span></li>
+            <li><div class="pip"></div><span class="n-salv">Inteligencia</span><span class="b-salv">+0</span></li>
+            <li><div class="pip"></div><span class="n-salv">Sabiduría</span><span class="b-salv">+0</span></li>
+            <li><div class="pip p"></div><span class="n-salv">Carisma ✦</span><span class="b-salv">+6</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">🎯</span><span class="t-title">Dado de Golpe e Iniciativa</span></div>
+        <div class="t-body" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;">
+            <div class="dado-golpe">d6</div>
+            <div>
+              <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--oro);opacity:.65;letter-spacing:.1em;">DADO DE GOLPE</div>
+              <div style="font-size:.82rem;color:var(--humo);">1 × <a href="https://www.dndbeyond.com/sources/dnd/basic-rules/combat#HitDice" target="_blank">d6</a> por nivel</div>
+            </div>
+          </div>
+          <div style="border-left:1px solid rgba(201,168,76,.15);padding-left:16px;">
+            <div style="font-family:'Cinzel',serif;font-size:.65rem;color:var(--oro);opacity:.65;letter-spacing:.1em;">INICIATIVA</div>
+            <div style="font-family:'Cinzel Decorative',serif;font-size:1.4rem;color:var(--oro-claro);">+3</div>
+            <div style="font-size:.75rem;color:var(--humo);opacity:.65;">(Mod. DES)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DERECHA -->
+    <div>
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">📜</span><span class="t-title">Habilidades</span><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#UsingEachAbility" target="_blank" class="t-link">Ver reglas</a></div>
+        <div class="t-body">
+          <div class="grilla-sk">
+            <div class="fila-sk"><div class="pipsk e"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Charisma" target="_blank">Engaño</a></span><span class="b-sk">+8</span></div>
+            <div class="fila-sk"><div class="pipsk e"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Charisma" target="_blank">Persuasión</a></span><span class="b-sk">+8</span></div>
+            <div class="fila-sk"><div class="pipsk p"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Dexterity" target="_blank">Juego de Manos</a></span><span class="b-sk">+5</span></div>
+            <div class="fila-sk"><div class="pipsk p"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Charisma" target="_blank">Actuación</a></span><span class="b-sk">+6</span></div>
+            <div class="fila-sk"><div class="pipsk p"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Intelligence" target="_blank">Conocimiento Arcano</a></span><span class="b-sk">+2</span></div>
+            <div class="fila-sk"><div class="pipsk p"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Wisdom" target="_blank">Perspicacia</a></span><span class="b-sk">+2</span></div>
+            <div class="fila-sk"><div class="pipsk"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Wisdom" target="_blank">Percepción</a></span><span class="b-sk">+0</span></div>
+            <div class="fila-sk"><div class="pipsk"></div><span class="n-sk"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/using-ability-scores#Dexterity" target="_blank">Sigilo</a></span><span class="b-sk">+3</span></div>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:14px;font-size:.68rem;color:var(--humo);opacity:.4;font-style:italic;">
+            <span>○ Sin competencia</span><span style="color:var(--oro)">● Competencia</span><span style="color:var(--oro-claro)">◉ Maestría</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">🍀</span><span class="t-title">Rasgos Raciales — Mediano Piesligeros</span><a href="https://www.dndbeyond.com/species/14-halfling" target="_blank" class="t-link">Documentación</a></div>
+        <div class="t-body">
+          <ul class="lista-rasgos">
+            <li><span class="r-icon">♣</span><div><span class="r-name"><a href="https://www.dndbeyond.com/species/14-halfling#LuckyTrait" target="_blank">Suerte</a></span><span class="r-desc">Cuando sacas un 1 en una tirada de ataque, prueba o salvación, puedes tirar de nuevo y debes usar el nuevo resultado.</span></div></li>
+            <li><span class="r-icon">♦</span><div><span class="r-name"><a href="https://www.dndbeyond.com/species/14-halfling#Brave" target="_blank">Valentía</a></span><span class="r-desc">Ventaja en tiradas de salvación contra la condición de Asustado.</span></div></li>
+            <li><span class="r-icon">♠</span><div><span class="r-name"><a href="https://www.dndbeyond.com/species/14-halfling#HalflingNimbleness" target="_blank">Agilidad de Mediano</a></span><span class="r-desc">Puedes moverte por el espacio de criaturas de mayor tamaño que tú.</span></div></li>
+            <li><span class="r-icon">♥</span><div><span class="r-name"><a href="https://www.dndbeyond.com/species/14-halfling#NaturallyStealthy" target="_blank">Sigilo Natural</a></span><span class="r-desc">Puedes intentar esconderte estando oculto solo por una criatura de mayor tamaño. +1 CAR de Piesligeros.</span></div></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tarjeta">
+        <div class="t-head"><span class="t-icon">💜</span><span class="t-title">Metamagia (desbloq. nivel 3)</span><a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#Metamagic" target="_blank" class="t-link">Ver reglas</a></div>
+        <div class="t-body">
+          <div style="font-size:.82rem;color:var(--humo);opacity:.65;margin-bottom:6px;">Los <a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#FontofMagic" target="_blank">Puntos de Hechicería</a> se obtienen en nivel 2. La Metamagia se elige en nivel 3.</div>
+          <div class="meta-tags">
+            <div class="meta-tag"><a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#QuickenedSpell" target="_blank">Conjuro Acelerado</a> <span style="opacity:.5;font-size:.7em">(2pts)</span></div>
+            <div class="meta-tag"><a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#EmpoweredSpell" target="_blank">Conjuro Potenciado</a> <span style="opacity:.5;font-size:.7em">(1pt)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONJUROS (ANCHO COMPLETO) -->
+    <div class="tarjeta ancho-completo">
+      <div class="t-head"><span class="t-icon">✨</span><span class="t-title">Conjuros Conocidos — Nivel 1 · CD 14 · +6 al ataque</span><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/spellcasting" target="_blank" class="t-link">Reglas de conjuros</a></div>
+      <div class="t-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;">
+          <div>
+            <div class="nivel-conj">
+              <div class="label-nivel">Trucos (A Voluntad)</div>
+              <div class="conj-tags">
+                <div class="conj-tag" data-tip="1d10 fuego · 120 pies · escala con nivel"><a href="https://www.dndbeyond.com/spells/2618946-fire-bolt" target="_blank">Dardo de Fuego</a></div>
+                <div class="conj-tag" data-tip="1d8 rayo · impide reacciones si impacta"><a href="https://www.dndbeyond.com/spells/2618972-shocking-grasp" target="_blank">Agarre Electrizante</a></div>
+                <div class="conj-tag" data-tip="Efectos menores: luces, limpiar, ilusiones simples"><a href="https://www.dndbeyond.com/spells/2618893-prestidigitation" target="_blank">Prestidigitación</a></div>
+                <div class="conj-tag conc" data-tip="1d6 psíquico · resta 1d4 a la siguiente salvación ⊙"><a href="https://www.dndbeyond.com/spells/mind-sliver" target="_blank">Astilla Mental ⊙</a></div>
+              </div>
+            </div>
+            <div class="nivel-conj">
+              <div class="label-nivel">
+                Nivel 1
+                <div class="espacios">
+                  <div class="espacio lleno"></div>
+                  <div class="espacio lleno"></div>
+                </div>
+              </div>
+              <div class="conj-tags">
+                <div class="conj-tag" data-tip="Ataque a distancia · 2d8 tipo aleatorio · puede encadenarse"><a href="https://www.dndbeyond.com/spells/chaos-bolt" target="_blank">Dardo del Caos</a></div>
+                <div class="conj-tag" data-tip="3 proyectiles de 1d4+1 fuerza · nunca falla"><a href="https://www.dndbeyond.com/spells/2619022-magic-missile" target="_blank">Proyectil Mágico</a></div>
+                <div class="conj-tag conc" data-tip="Conc. 1 min · +2 CA y salvaciones DES ⊙"><a href="https://www.dndbeyond.com/spells/shield-of-faith" target="_blank">Escudo de Fe ⊙</a></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--rojo-claro);opacity:.8;margin-bottom:6px;">
+              <a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#WildMagicSurge" target="_blank" style="color:var(--rojo-claro)">Surgimiento de Magia Salvaje</a> — Muestra de la tabla
+            </div>
+            <div class="tabla-salvaje">
+              <div class="entrada-sv"><span class="tirada-sv">01–02</span><span class="efecto-sv">Lanzas Bola de Fuego centrada en ti (3d6)</span></div>
+              <div class="entrada-sv"><span class="tirada-sv">11–12</span><span class="efecto-sv">Lanzas Engrase centrado en ti mismo</span></div>
+              <div class="entrada-sv"><span class="tirada-sv">19–20</span><span class="efecto-sv">Recuperas 4d6 puntos de golpe</span></div>
+              <div class="entrada-sv"><span class="tirada-sv">35–36</span><span class="efecto-sv">Invisible hasta fin de tu siguiente turno</span></div>
+              <div class="entrada-sv"><span class="tirada-sv">53–54</span><span class="efecto-sv">Te conviertes en maceta hasta tu siguiente turno</span></div>
+              <div class="entrada-sv"><span class="tirada-sv">77–78</span><span class="efecto-sv">Hasta 3 criaturas elegidas recuperan 10 PG</span></div>
+            </div>
+            <div style="margin-top:10px;">
+              <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;color:var(--oro);opacity:.55;margin-bottom:6px;">Rasgos de Clase — Nivel 1</div>
+              <ul class="lista-rasgos" style="margin:0">
+                <li><span class="r-icon">♠</span><div><span class="r-name"><a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#WildMagicSurge" target="_blank">Surgimiento de Magia Salvaje</a></span><span class="r-desc">El DM puede pedirte tirar 1d20 tras conjurar nivel 1+. Con un 1, tiras en la tabla de Magia Salvaje (d100, 50 efectos).</span></div></li>
+                <li><span class="r-icon">♥</span><div><span class="r-name"><a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#TidesofChaos" target="_blank">Mareas del Caos</a></span><span class="r-desc">1×/descanso largo: ventaja en una tirada de ataque, prueba o salvación. Puede desencadenar un Surgimiento.</span></div></li>
+              </ul>
+            </div>
+            <div style="margin-top:8px;font-size:.7rem;color:var(--humo);opacity:.45;font-style:italic;">
+              ⊙ = Concentración · <a href="https://www.dndbeyond.com/sources/dnd/phb/sorcerer#WildMagicSurgeTable" target="_blank">Ver tabla completa (50 efectos)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORIA + PERSONALIDAD + EQUIPO -->
+    <div class="tarjeta ancho-completo">
+      <div class="t-head"><span class="t-icon">🃏</span><span class="t-title">Historia, Personalidad y Equipo</span><a href="https://www.dndbeyond.com/backgrounds/charlatan" target="_blank" class="t-link">Trasfondo: Charlatán</a></div>
+      <div class="t-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);opacity:.6;margin-bottom:8px;">Historia</div>
+            <div class="texto-trasfondo">
+              <p>Pip Tumblecoin nunca pidió la magia. Llegó sin avisar una noche en el cuarto trasero del casino "El Basilisco Dorado", cuando un farol desesperado encendió la mesa en llamas violetas.</p>
+              <p>Desde entonces vive de ciudad en ciudad, un paso por delante de las deudas y dos pasos por delante del sentido común. La magia es impredecible. Los dados también. Pip no ve la diferencia.</p>
+            </div>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);opacity:.6;margin-bottom:8px;">Personalidad</div>
+            <ul class="lista-rasgos">
+              <li><span class="r-icon">♠</span><div><span class="r-name">Rasgo</span><span class="r-desc">Siempre lee la sala — observa los gestos de todos antes de abrir la boca.</span></div></li>
+              <li><span class="r-icon">♦</span><div><span class="r-name"><a href="https://www.dndbeyond.com/sources/dnd/basic-rules/personality-and-background#PersonalCharacteristics" target="_blank">Ideal</a></span><span class="r-desc">Libertad: ninguna jaula, ningún contrato. Los dados deciden.</span></div></li>
+              <li><span class="r-icon">♣</span><div><span class="r-name">Vínculo</span><span class="r-desc">Le debe una deuda a quien dobló con mano ganadora, dejándole escapar.</span></div></li>
+              <li><span class="r-icon">♥</span><div><span class="r-name">Defecto</span><span class="r-desc">No puede resistir una apuesta. Ha perdido un sombrero, un nombre y un recuerdo.</span></div></li>
+            </ul>
+          </div>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.18em;text-transform:uppercase;color:var(--oro);opacity:.6;margin-bottom:8px;">Equipo Inicial</div>
+            <ul class="lista-equipo">
+              <li>Daga</li><li>Bolsa de componentes</li>
+              <li>Ropa fina</li><li>Sombrero de ala ancha</li>
+              <li>Baraja marcada</li><li>Dados cargados</li>
+              <li><a href="https://www.dndbeyond.com/equipment/forgery-kit" target="_blank">Kit de falsificación</a></li><li>15 po (inicio)</li>
+            </ul>
+            <div style="margin-top:12px;font-size:.82rem;color:var(--humo);opacity:.65;">
+              Idiomas: <a href="https://www.dndbeyond.com/sources/dnd/basic-rules/equipment#Languages" target="_blank">Común</a> y Mediano<br>
+              Herramientas: Kit de falsificación · Naipes
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTAS -->
+    <div class="tarjeta ancho-completo">
+      <div class="t-head"><span class="t-icon">📝</span><span class="t-title">Notas de Campaña</span></div>
+      <div class="t-body">
+        <textarea class="area-notas" placeholder="Anota aquí eventos de campaña, PNJs conocidos, misiones activas, objetos especiales..."></textarea>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pie">
+    <div class="pie-palos">♠ ♥ ♣ ♦</div>
+    <div class="pie-nota">D&D 5e · Mediano Hechicero de Magia Salvaje · Nivel 1 · Campaña Nueva</div>
+  </div>
+
+</div>
+
+<script>
+  const hpMax = 6; let hp = 6;
+  const hpEl = document.getElementById('hp-num');
+  const hpBar = document.getElementById('hp-bar');
+  function updateHP() {
+    hpEl.textContent = hp;
+    const pct = Math.max(0, hp/hpMax*100);
+    hpBar.style.width = pct+'%';
+    hpBar.style.background = pct>60 ? 'linear-gradient(90deg,#8b1a1a,#c13030)' : pct>30 ? 'linear-gradient(90deg,#8b6010,#c19030)' : 'linear-gradient(90deg,#3a0a0a,#8b1a1a)';
+  }
+  hpEl.addEventListener('click', () => {
+    const v = prompt('HP actuales (máx '+hpMax+'):', hp);
+    if(v!==null && !isNaN(parseInt(v))) { hp = Math.min(hpMax, Math.max(0, parseInt(v))); updateHP(); }
+  });
+  document.querySelectorAll('.espacio').forEach(s => {
+    s.addEventListener('click', () => { s.classList.toggle('usado'); s.classList.toggle('lleno', !s.classList.contains('usado')); });
+  });
+  const els = document.querySelectorAll('.tarjeta,.caja-stat,.tira,.alerta');
+  els.forEach((el,i) => {
+    el.style.opacity='0'; el.style.transform='translateY(14px)';
+    setTimeout(()=>{ el.style.transition='opacity .45s ease,transform .45s ease'; el.style.opacity='1'; el.style.transform='translateY(0)'; }, 60+i*38);
+  });
+</script>
+</body>
+</html>
