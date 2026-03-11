@@ -152,6 +152,151 @@
     .grilla-sk{grid-template-columns:1fr}
     .lista-equipo{grid-template-columns:1fr}
   }
+
+  /* ─── GALERÍA ─── */
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+  }
+  .galeria-thumb {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(201,168,76,0.2);
+    cursor: pointer;
+    background: rgba(0,0,0,0.4);
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+    group: true;
+  }
+  .galeria-thumb:hover {
+    border-color: var(--oro);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6), 0 0 16px rgba(201,168,76,0.15);
+  }
+  .galeria-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter .2s;
+  }
+  .galeria-thumb:hover img { filter: brightness(1.1); }
+  .galeria-thumb .thumb-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity .2s;
+    display: flex; align-items: flex-end; padding: 10px;
+  }
+  .galeria-thumb:hover .thumb-overlay { opacity: 1; }
+  .thumb-titulo {
+    font-family: 'Cinzel', serif;
+    font-size: .65rem;
+    letter-spacing: .1em;
+    color: var(--oro-claro);
+    line-height: 1.3;
+  }
+  /* placeholder sin imagen */
+  .galeria-thumb.vacia {
+    border: 1px dashed rgba(201,168,76,0.2);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px; cursor: default;
+  }
+  .galeria-thumb.vacia:hover {
+    transform: none; box-shadow: none; border-color: rgba(201,168,76,0.25);
+  }
+  .placeholder-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.4rem;
+    color: var(--oro);
+    opacity: .2;
+  }
+  .placeholder-label {
+    font-family: 'Cinzel', serif;
+    font-size: .58rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--humo);
+    opacity: .3;
+    text-align: center;
+    padding: 0 8px;
+  }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.92);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s;
+    backdrop-filter: blur(6px);
+  }
+  .lightbox.activo { opacity: 1; pointer-events: all; }
+  .lb-contenido {
+    position: relative;
+    max-width: 90vw; max-height: 90vh;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .lb-img {
+    max-width: 100%; max-height: 80vh;
+    border-radius: 8px;
+    border: 1px solid rgba(201,168,76,0.3);
+    box-shadow: 0 0 60px rgba(0,0,0,0.8), 0 0 30px rgba(201,168,76,0.1);
+    object-fit: contain;
+    display: block;
+  }
+  .lb-info {
+    text-align: center;
+  }
+  .lb-titulo {
+    font-family: 'Cinzel', serif;
+    font-size: .9rem;
+    letter-spacing: .15em;
+    color: var(--oro-claro);
+    margin-bottom: 4px;
+  }
+  .lb-desc {
+    font-family: 'Crimson Pro', serif;
+    font-size: .85rem;
+    color: var(--humo);
+    opacity: .7;
+    font-style: italic;
+  }
+  .lb-cerrar {
+    position: absolute; top: -40px; right: 0;
+    background: none; border: none;
+    color: var(--oro); font-size: 1.6rem;
+    cursor: pointer; opacity: .6; transition: opacity .15s;
+    line-height: 1;
+  }
+  .lb-cerrar:hover { opacity: 1; }
+  .lb-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--oro); font-size: 1.4rem;
+    width: 44px; height: 44px;
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; opacity: .6;
+  }
+  .lb-nav:hover { opacity: 1; background: rgba(201,168,76,0.15); border-color: var(--oro); }
+  .lb-prev { left: -60px; }
+  .lb-next { right: -60px; }
+  .lb-contador {
+    font-family: 'Cinzel', serif;
+    font-size: .65rem;
+    letter-spacing: .2em;
+    color: var(--oro);
+    opacity: .5;
+  }
+  @media(max-width:700px){
+    .galeria-grid { grid-template-columns: repeat(3,1fr); }
+    .lb-prev { left: -10px; }
+    .lb-next { right: -10px; }
+  }
 </style>
 </head>
 <body>
@@ -418,6 +563,42 @@
 
   </div>
 
+  <!-- GALERÍA DE ILUSTRACIONES -->
+  <div class="tarjeta" style="margin-bottom:18px;">
+    <div class="t-head">
+      <span class="t-icon">🎨</span>
+      <span class="t-title">Ilustraciones de Pip Tumblecoin</span>
+      <span style="font-family:'Cinzel',serif;font-size:.6rem;color:var(--humo);opacity:.4;letter-spacing:.1em;">CLICK PARA AGRANDAR</span>
+    </div>
+    <div class="t-body">
+      <div class="galeria-grid" id="galeria">
+        <div class="galeria-thumb vacia" data-idx="0"><div class="placeholder-num">I</div><div class="placeholder-label">La Jugada del Siglo</div></div>
+        <div class="galeria-thumb vacia" data-idx="1"><div class="placeholder-num">II</div><div class="placeholder-label">El Surgimiento</div></div>
+        <div class="galeria-thumb vacia" data-idx="2"><div class="placeholder-num">III</div><div class="placeholder-label">La Huida por los Tejados</div></div>
+        <div class="galeria-thumb vacia" data-idx="3"><div class="placeholder-num">IV</div><div class="placeholder-label">El Farol Imposible</div></div>
+        <div class="galeria-thumb vacia" data-idx="4"><div class="placeholder-num">V</div><div class="placeholder-label">El Origen</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:.75rem;color:var(--humo);opacity:.4;font-style:italic;">
+        Para agregar imágenes subí los archivos a <code style="color:var(--oro);opacity:.6;">img/escena-1.jpg</code> ... <code style="color:var(--oro);opacity:.6;">img/escena-5.jpg</code> en el repo.
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lb-contenido">
+      <button class="lb-cerrar" id="lb-cerrar">✕</button>
+      <button class="lb-nav lb-prev" id="lb-prev">‹</button>
+      <button class="lb-nav lb-next" id="lb-next">›</button>
+      <img class="lb-img" id="lb-img" src="" alt="">
+      <div class="lb-info">
+        <div class="lb-titulo" id="lb-titulo"></div>
+        <div class="lb-desc" id="lb-desc"></div>
+        <div class="lb-contador" id="lb-contador"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="pie">
     <div class="pie-palos">♠ ♥ ♣ ♦</div>
     <div class="pie-nota">D&D 5e · Mediano Hechicero de Magia Salvaje · Nivel 1 · Campaña Nueva</div>
@@ -446,6 +627,75 @@
   els.forEach((el,i) => {
     el.style.opacity='0'; el.style.transform='translateY(14px)';
     setTimeout(()=>{ el.style.transition='opacity .45s ease,transform .45s ease'; el.style.opacity='1'; el.style.transform='translateY(0)'; }, 60+i*38);
+  });
+
+  // ─── GALERÍA & LIGHTBOX ───
+  const escenas = [
+    { titulo: 'I — La Jugada del Siglo',       desc: 'Pip sostiene la mano imbatible del truco en una taberna mugrosa.',           src: 'img/escena-1.png' },
+    { titulo: 'II — El Surgimiento',            desc: 'Magia Salvaje desatada: las cartas vuelan y el Tres de Oros arde en violeta.', src: 'img/escena-2.png' },
+    { titulo: 'III — La Huida por los Tejados', desc: 'Medianoche. Las cartas marcadas caen detrás mientras Pip escapa.',           src: 'img/escena-3.png' },
+    { titulo: 'IV — El Farol Imposible',        desc: 'La peor mano del truco, la sonrisa más tranquila de la sala.',               src: 'img/escena-4.png' },
+    { titulo: 'V — El Origen',                  desc: 'El primer Surgimiento en El Basilisco Dorado. El momento que lo cambió todo.', src: 'img/escena-5.png' },
+  ];
+
+  let idxActual = 0;
+  const lb         = document.getElementById('lightbox');
+  const lbImg      = document.getElementById('lb-img');
+  const lbTitulo   = document.getElementById('lb-titulo');
+  const lbDesc     = document.getElementById('lb-desc');
+  const lbContador = document.getElementById('lb-contador');
+
+  function abrirLightbox(idx) {
+    idxActual = idx;
+    const e = escenas[idx];
+    lbImg.src = e.src;
+    lbImg.alt = e.titulo;
+    lbTitulo.textContent = e.titulo;
+    lbDesc.textContent = e.desc;
+    lbContador.textContent = (idx + 1) + ' / ' + escenas.length;
+    lb.classList.add('activo');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrarLightbox() {
+    lb.classList.remove('activo');
+    document.body.style.overflow = '';
+  }
+
+  function navegar(dir) {
+    idxActual = (idxActual + dir + escenas.length) % escenas.length;
+    abrirLightbox(idxActual);
+  }
+
+  // Construir thumbs con imagen si existe
+  const thumbs = document.querySelectorAll('.galeria-thumb');
+  thumbs.forEach((thumb, idx) => {
+    const e = escenas[idx];
+    // Intentar cargar la imagen; si existe reemplaza el placeholder
+    const testImg = new Image();
+    testImg.onload = () => {
+      thumb.classList.remove('vacia');
+      thumb.innerHTML = `
+        <img src="${e.src}" alt="${e.titulo}" loading="lazy">
+        <div class="thumb-overlay"><div class="thumb-titulo">${e.titulo}</div></div>
+      `;
+      thumb.addEventListener('click', () => abrirLightbox(idx));
+    };
+    testImg.onerror = () => {
+      // Mantiene el placeholder pero sin click
+    };
+    testImg.src = e.src;
+  });
+
+  document.getElementById('lb-cerrar').addEventListener('click', cerrarLightbox);
+  document.getElementById('lb-prev').addEventListener('click', () => navegar(-1));
+  document.getElementById('lb-next').addEventListener('click', () => navegar(1));
+  lb.addEventListener('click', e => { if (e.target === lb) cerrarLightbox(); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('activo')) return;
+    if (e.key === 'Escape') cerrarLightbox();
+    if (e.key === 'ArrowLeft') navegar(-1);
+    if (e.key === 'ArrowRight') navegar(1);
   });
 </script>
 </body>
